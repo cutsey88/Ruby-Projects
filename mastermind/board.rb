@@ -2,16 +2,15 @@
 
 # Mastermind board
 class Board
-  attr_accessor :code_row, :key_row, :guess_row
+  attr_accessor :code_row, :guess_row
 
   def initialize
     @code_row = []
-    @key_row = []
     @guess_row = []
   end
 
-  def show_key_row
-    puts key_row
+  def game_over?
+    code_row == @guess_row
   end
 
 end
