@@ -5,17 +5,32 @@ require_relative 'display.rb'
 # Contains logic for game
 class Game
   include Display
-  attr_reader :board
+  attr_reader :board, :guesser
 
   def initialize
     @code_peg_colors = %w[red orange yellow green blue purple]
     @board = Board.new
+    @guesser = true
   end
 
   def play
     display_intro
+    guesser_mastermind
     place_code_pegs
     take_turns
+  end
+
+  def guesser_mastermind
+    player_guess = gets.chomp.downcase
+    case player_guess
+    when 'y'
+      @guesser = true
+    when 'n'
+      @guesser = false
+    else
+      puts "Please enter 'Y' or 'N'."
+      guesser_mastermind
+    end
   end
 
   def place_code_pegs
@@ -24,10 +39,19 @@ class Game
 
   def choose_code_pegs
     chosen_code_pegs = []
-    4.times do
-      chosen_code_pegs.push(@code_peg_colors.sample)
+    if guesser
+      random_color_sample(chosen_code_pegs)
+    else
+      puts display_code_pick_prompt
+      chosen_code_pegs = gets.chomp.split
     end
     chosen_code_pegs
+  end
+
+  def random_color_sample(array)
+    4.times do
+      array.push(@code_peg_colors.sample)
+    end
   end
 
   def take_turns
@@ -44,8 +68,14 @@ class Game
 
   def make_a_guess
     puts display_guess_prompt
-    guess = gets.chomp
-    @board.guess_row = guess.split
+    if guesser
+      guess = gets.chomp
+      @board.guess_row = guess.split
+    else
+      guess = []
+      random_color_sample(guess)
+      @board.guess_row = guess
+    end
   end
 
   def check_guess

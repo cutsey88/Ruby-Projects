@@ -5,14 +5,24 @@ module Display
   def display_intro
     puts <<~HEREDOC
       Welcome to Mastermind!
-      Test your brainpower and see if you can crack your opponents code.
-      Enter four colors (you can repeat) to try and match your opponents code.
-      You will get 12 tries for glorious victory.
+      Test your brainpower and see if you can crack your opponents code
+      or fool them with your own.
+      -The Mastermind enters four colors (colors can be repeated) to make a code.
+      -The Guesser enters four colors to try and
+       match their opponent's code to win.
+      -The Guesser gets 12 tries for glorious victory.
+
+      Do you want to be the Guesser (Y/N)?
     HEREDOC
   end
 
   def display_guess_prompt
     'Please enter a guess. Valid colors are red, '\
+    'orange, yellow, green, blue, and purple.'
+  end
+
+  def display_code_pick_prompt
+    'Please enter a code of four words. Valid colors are red, '\
     'orange, yellow, green, blue, and purple.'
   end
 
