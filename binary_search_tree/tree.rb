@@ -110,4 +110,23 @@ class Tree
     end
     val_array
   end
+
+  def inorder(base=root,array=[])
+    return base.data if base.left_child.nil? && base.right_child.nil?
+
+    array << inorder(base.left_child) unless base.left_child.nil?
+    array << base.data
+    array << inorder(base.right_child) unless base.right_child.nil?
+    array.flatten
+  end
+
+  def preorder(base=root,array=[])
+    array << base.data
+    array << preorder(base.left_child) unless base.left_child.nil?
+    array << preorder(base.right_child) unless base.right_child.nil?
+    array.flatten
+  end
+
+  def postorder
+  end
 end
