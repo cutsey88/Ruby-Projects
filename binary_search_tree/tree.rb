@@ -127,6 +127,12 @@ class Tree
     array.flatten
   end
 
-  def postorder
+  def postorder(base=root,array=[])
+    return base.data if base.left_child.nil? && base.right_child.nil?
+
+    array << postorder(base.left_child) unless base.left_child.nil?
+    array << postorder(base.right_child) unless base.right_child.nil?
+    array << base.data
+    array.flatten
   end
 end

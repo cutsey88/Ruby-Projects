@@ -15,4 +15,4 @@ other_tree = Tree.new([15,25,20,30,40,45,35,50,70,60,55,65,75,80,85])
 
 p other_tree
 puts '______break____-'
-p other_tree.preorder
+p other_tree.postorder
