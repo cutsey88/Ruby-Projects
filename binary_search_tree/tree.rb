@@ -135,4 +135,27 @@ class Tree
     array << base.data
     array.flatten
   end
+
+  def height(value, current_height=0, record=[])
+    value.is_a?(Integer) ? base = find(value) : base = value
+    return current_height if base.left_child.nil? && base.right_child.nil?
+
+    record << height(base.left_child, current_height + 1) unless base.left_child.nil?
+    record << height(base.right_child, current_height + 1) unless base.right_child.nil?
+    record.max
+  end
+
+  def depth(value)
+    target = root
+    depth = 0
+    until target == value
+      if target > value
+        target = target.left_child
+      else
+        target = target.right_child
+      end
+      depth += 1
+    end
+    depth
+  end
 end
