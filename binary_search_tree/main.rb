@@ -1,22 +1,34 @@
 require_relative 'tree.rb'
-
-=begin
-my_tree = Tree.new([2,6,3,9,8,5,7,1])
+my_array = Array.new(15) { rand(1..100) }
+my_tree = Tree.new((Array.new(15) { rand(1..100) }))
 
 p my_tree
-puts '_____break___'
-my_tree.insert(4)
-p my_tree
-puts my_tree.find(9)
-p my_tree.find(6)
-=end
-
-other_tree = Tree.new([15,25,20,30,40,45,35,50,70,60,55,65,75,80,85])
-
-p other_tree
-puts '______break____-'
-puts other_tree.height(75)
-puts other_tree.height(20)
-puts other_tree.height(50)
-puts other_tree.height(70)
-
+puts "_____break____"
+p my_tree.balanced?
+p my_tree.level_order
+puts "_____break____"
+p my_tree.preorder
+puts "_____break____"
+p my_tree.postorder
+puts "_____break____"
+p my_tree.inorder
+puts "_____break____"
+my_tree.insert(110)
+my_tree.insert(111)
+my_tree.insert(121)
+my_tree.insert(130)
+my_tree.insert(140)
+my_tree.insert(135)
+my_tree.insert(114)
+p my_tree.balanced?
+puts "_____break____"
+new_tree = my_tree.rebalance
+p new_tree.balanced?
+puts "_____break____"
+p new_tree.level_order
+puts "_____break____"
+p new_tree.preorder
+puts "_____break____"
+p new_tree.postorder
+puts "_____break____"
+p new_tree.inorder

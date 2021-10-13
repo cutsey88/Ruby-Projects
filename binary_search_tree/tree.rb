@@ -158,4 +158,25 @@ class Tree
     end
     depth
   end
+
+  def balanced?(base=root)
+    result = true
+    if base.left_child && base.right_child
+      height(base.left_child) - height(base.right_child) >= 2 || height(base.left_child) - height(base.right_child) <= -2 ? result = false : result = true
+      return result if result == false
+
+      result = balanced?(base.left_child)
+      return result if result == false
+
+      result = balanced?(base.right_child)
+    end
+    result
+  end
+
+  def rebalance
+    unless self.balanced?
+      array = self.level_order
+      Tree.new(array)
+    end
+  end
 end
