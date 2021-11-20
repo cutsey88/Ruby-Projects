@@ -29,9 +29,7 @@ class Game
       play_turn
       player_shift unless game_over?
     end
-    board.show_board
-    display_win_message
-    play_again
+    after_win
   end
 
   def display_player_turn
@@ -152,6 +150,12 @@ class Game
         break
       end
     end
+  end
+
+  def after_win
+    board.show_board
+    display_win_message
+    play_again
   end
 
   def display_win_message
