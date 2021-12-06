@@ -17,9 +17,22 @@ class Pawn < Piece
     #blackunicode = blacksym
     assign_symbol(#whiteunicode,blackunicode)
   end
+
+  def possible_move?
+  end
+
+  def potential_moves(current_space)
+    moves = []
+    moves
+  end
 end
 
 class Rook < Piece
+
+  def potential_moves
+    moves = []
+    moves
+  end
 end
 
 class Bishop < Piece

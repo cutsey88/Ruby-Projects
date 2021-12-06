@@ -1,11 +1,13 @@
 require_relative 'board.rb'
 require_relative 'pieces.rb'
+require_relative 'display.rb'
 
 class Game
-  attr_accessor :board, :current_turn
+  include Display
+  attr_accessor :chess_board, :current_turn
 
   def initialize
-    @board = Board.new
+    @chess_board = Board.new
     @current_turn = 'white'
   end
 
@@ -19,41 +21,112 @@ class Game
   end
 
   def place_pawns
-    board.each do |column|
+    chess_board.board.each do |column|
       column[1] = Pawn.new('white')
       column[6] = Pawn.new('black')
     end
   end
 
   def place_rooks
-    board[0][0] = Rook.new('white')
-    board[7][0] = Rook.new('white')
-    board[0][7] = Rook.new('black')
-    board[7][7] = Rook.new('black')
+    chess_board.board[0][0] = Rook.new('white')
+    chess_board.board[7][0] = Rook.new('white')
+    chess_board.board[0][7] = Rook.new('black')
+    chess_board.board[7][7] = Rook.new('black')
   end
 
   def place_knights
-    board[1][0] = Knight.new('white')
-    board[6][0] = Knight.new('white')
-    board[1][7] = Knight.new('black')
-    board[6][7] = Knight.new('black')
+    chess_board.board[1][0] = Knight.new('white')
+    chess_board.board[6][0] = Knight.new('white')
+    chess_board.board[1][7] = Knight.new('black')
+    chess_board.board[6][7] = Knight.new('black')
   end
 
   def place_bishops
-    board[2][0] = Bishop.new('white')
-    board[5][0] = Bishop.new('white')
-    board[2][7] = Bishop.new('black')
-    board[5][7] = Bishop.new('black')
+    chess_board.board[2][0] = Bishop.new('white')
+    chess_board.board[5][0] = Bishop.new('white')
+    chess_board.board[2][7] = Bishop.new('black')
+    chess_board.board[5][7] = Bishop.new('black')
   end
 
   def place_queens
-    board[3][0] = Queen.new('white')
-    board[4][7] = Queen.new('black')
+    chess_board.board[3][0] = Queen.new('white')
+    chess_board.board[4][7] = Queen.new('black')
   end
 
   def place_kings
-    board[4][0] = King.new('white')
-    board[3][7] = King.new('black')
+    chess_board.board[4][0] = King.new('white')
+    chess_board.board[3][7] = King.new('black')
+  end
+
+  def make_move
+    target = target_input
+    piece_in_space?(target)
+    destination = destination_input
+  end
+
+  #Get the target space and return array with integer values (x, y)
+  def target_input
+    target_space = gets.chomp
+    if verify_input(target_space)
+      space_xy = shift_input(target_space)
+    else
+      space_xy = target_input
+    end
+    verify_piece(space_xy) ? space_xy : target_input
+  end
+
+  def shift_input(string_input)
+    [string_input[0].to_i, string_input[1].to_i]
+  end
+
+  def destination_input
+    gets.chomp
+    #legal_move method under destination_input to check if the destination is legal
+  end
+
+  def verify_input(input)
+    if input.length != 2
+      puts wrong_length_message
+      return false
+    elsif !input.match(/\d\d/)
+      puts wrong_char_message
+      return false
+    elsif !input_on_board?(input)
+      puts not_on_board_message
+      return false
+    end
+    true
+  end
+
+  #Take input as [x,y], check if space is on the board
+  def input_on_board?(input)
+    Board.all_board_spaces.include?(input)
+  end
+
+  def verify_piece(space)
+    unless piece_in_space?(space)
+      puts no_piece_message
+      return false
+    end
+    unless piece_is_current_players?(space)
+      puts not_your_piece_message
+      return false
+    end
+    true
+  end
+
+  def piece_in_space?(input)
+    chess_board.board[input[0]][input[1]].is_a?(Piece)
+  end
+
+  def piece_is_current_players?(input)
+    input.color == current_turn
+  end
+
+  def move_piece
+  end
+
+  def take_piece
   end
 
   def change_player_turn
