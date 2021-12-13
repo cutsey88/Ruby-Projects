@@ -18,4 +18,8 @@ module Display
   def not_your_piece_message
     'This is not your piece. Try again.'
   end
+
+  def bad_destination_message
+    'Please choose a valid space to move to.'
+  end
 end

@@ -60,8 +60,8 @@ class Game
 
   def make_move
     target = target_input
-    piece_in_space?(target)
-    destination = destination_input
+    my_piece = chess_board.board[target[0]][target[1]]
+    destination = destination_input(my_piece)
   end
 
   #Get the target space and return array with integer values (x, y)
@@ -69,6 +69,7 @@ class Game
     target_space = gets.chomp
     if verify_input(target_space)
       space_xy = shift_input(target_space)
+      space_xy = target_input unless verify_space(space_xy)
     else
       space_xy = target_input
     end
@@ -79,9 +80,14 @@ class Game
     [string_input[0].to_i, string_input[1].to_i]
   end
 
-  def destination_input
-    gets.chomp
-    #legal_move method under destination_input to check if the destination is legal
+  def destination_input(moving_piece)
+    destination = gets.chomp
+    if verify_input(destination)
+      space_xy = shift_input(destination)
+    else
+      space_xy = destination_input
+    end
+    legal_space(space_xy, moving_piece) ? space_xy : destination_input
   end
 
   def verify_input(input)
@@ -91,9 +97,6 @@ class Game
     elsif !input.match(/\d\d/)
       puts wrong_char_message
       return false
-    elsif !input_on_board?(input)
-      puts not_on_board_message
-      return false
     end
     true
   end
@@ -101,6 +104,15 @@ class Game
   #Take input as [x,y], check if space is on the board
   def input_on_board?(input)
     Board.all_board_spaces.include?(input)
+  end
+
+  def verify_space(space)
+    if input_on_board?(space)
+      true
+    else
+      puts not_on_board_message
+      false
+    end
   end
 
   def verify_piece(space)
@@ -113,6 +125,16 @@ class Game
       return false
     end
     true
+  end
+
+  def legal_space(space, moving_piece)
+    possible_spaces = moving_piece.possible_moves
+    if possible_spaces.include?(space)
+      true
+    else
+      puts bad_destination_message
+      false
+    end
   end
 
   def piece_in_space?(input)
