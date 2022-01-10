@@ -58,10 +58,33 @@ class Game
     chess_board.board[3][7] = King.new('black')
   end
 
+  def play
+    until checkmate?
+      make_move
+    end
+  end
+
   def make_move
     target = target_input
     my_piece = chess_board.board[target[0]][target[1]]
     destination = destination_input(my_piece)
+    move_piece(target, destination, my_piece)
+  end
+
+  def check?
+    king_space = current_player_spaces.reduce { |result, space|
+      break space if chess_board.board[space[0]][space[1]].is_a?(King)
+    }
+    opponent_spaces.reduce { |result, opp_piece|
+      if legal_space(king_space, opp_piece, opponent_spaces, current_player_spaces)
+        break true
+      else
+        false
+      end
+    }
+  end
+
+  def checkmate?
   end
 
   #Get the target space and return array with integer values (x, y)
@@ -87,7 +110,15 @@ class Game
     else
       space_xy = destination_input
     end
-    legal_space(space_xy, moving_piece) ? space_xy : destination_input
+    legal_space(space_xy, moving_piece, current_player_spaces, opponent_spaces) ? space_xy : destination_input
+  end
+
+  def current_player_spaces
+    current_turn == 'white' ? chess_board.white_piece_spaces : chess_board.black_piece_spaces
+  end
+
+  def opponent_spaces
+    current_turn == 'white' ? chess_board.black_piece_spaces : chess_board.white_piece_spaces
   end
 
   def verify_input(input)
@@ -127,12 +158,12 @@ class Game
     true
   end
 
-  def legal_space(space, moving_piece)
-    possible_spaces = moving_piece.possible_moves
+  def legal_space(space, moving_piece, player_spaces, opp_spaces)
+    possible_spaces = moving_piece.possible_moves(space, player_spaces, opp_spaces)
     if possible_spaces.include?(space)
       true
     else
-      puts bad_destination_message
+      # move message : puts bad_destination_message
       false
     end
   end
@@ -145,9 +176,12 @@ class Game
     input.color == current_turn
   end
 
-  def move_piece
+  def move_piece(start_space, end_space, piece)
+    chess_board.board[end_space[0]][end_space[1]] = piece
+    chess_board.board[start_space[0]][start_space[1]] = 'empty'
   end
 
+  #If I want to show which pieces were taken on the side of the board
   def take_piece
   end
 

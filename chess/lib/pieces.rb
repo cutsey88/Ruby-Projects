@@ -10,21 +10,6 @@ class Piece
   def assign_symbol(white_piece, black_piece)
     color == 'white' ? @symbol = white_piece : @symbol = black_piece
   end
-  #extranneous?
-  def directional_potential(current_space, &direction_block)
-    moves = []
-    inc = 1
-    loop do
-      potential_spot = direction_block.call(current_space, inc)
-      if Board.all_board_spaces.include?(potential_spot)
-        moves << potential_spot
-        inc += 1
-      else
-        break
-      end
-    end
-    moves
-  end
   
   #Determine possible moves up, down, left, and right
   def up_down_right_left(current_space, player_pieces, opponent_pieces)
@@ -107,19 +92,17 @@ end
 class Pawn < Piece
   def initialize(color)
     super(color)
-    #whiteunicode = whitesym
-    #blackunicode = blacksym
-    assign_symbol(#whiteunicode,blackunicode)
+    assign_symbol("\u2659", "\u265F")
   end
 
   def possible_moves(current_space, player_pieces, opponent_pieces)
     moves = []
-    potential_moves(current_space).each {
-      |space| moves << space unless opponent_pieces.include?(space) ||
-      player_pieces.include?(space)
+    potential_moves(current_space).each { |space|
+      moves << space unless opponent_pieces.include?(space) ||
+                            player_pieces.include?(space)
     }
-    attack_moves(current_space).each {
-      |space| moves << space if opponent_pieces.include?(space)
+    attack_moves(current_space).each { |space|
+      moves << space if opponent_pieces.include?(space)
     }
     moves.map { |space| space if Board.all_board_spaces.include?(space) }
   end
@@ -150,18 +133,33 @@ class Pawn < Piece
 end
 
 class Rook < Piece
+  def initialize(color)
+    super(color)
+    assign_symbol("\u2656", "\u265C")
+  end
+
   def possible_moves(current_space, player_pieces, opponent_pieces)
     up_down_right_left(current_space, player_pieces, opponent_pieces)
   end
 end
 
 class Bishop < Piece
+  def initialize(color)
+    super(color)
+    assign_symbol("\u2657", "\u265D")
+  end
+
   def possible_moves(current_space, player_pieces, opponent_pieces)
     diagonals(current_space, player_pieces, opponent_pieces)
   end
 end
 
 class Knight < Piece
+  def initialize(color)
+    super(color)
+    assign_symbol("\u2658", "\u265E")
+  end
+
   def possible_moves(current_space, player_pieces, opponent_pieces)
     potential_moves(current_space).map do |space|
       space if !player_pieces.include?(space) && Board.all_board_spaces.include?(space)
@@ -183,6 +181,11 @@ class Knight < Piece
 end
 
 class Queen < Piece
+  def initialize(color)
+    super(color)
+    assign_symbol("\u2655", "\u265B")
+  end
+
   def possible_moves(current_space, player_pieces, opponent_pieces)
     moves = []
     up_down_right_left(current_space, player_pieces, opponent_pieces).each { 
@@ -194,6 +197,11 @@ class Queen < Piece
 end
 
 class King < Piece
+  def initialize(color)
+    super(color)
+    assign_symbol("\u2654", "\u265A")
+  end
+
   def possible_moves(current_space, player_pieces, opponent_pieces)
     potential_moves.map { |space| space unless player_pieces.include?(space) }
   end

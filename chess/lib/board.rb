@@ -15,6 +15,14 @@ class Board
     @@board_spaces
   end
 
+  def white_piece_spaces
+    white_black_piece_spaces[:white]
+  end
+
+  def black_piece_spaces
+    white_black_piece_spaces[:black]
+  end
+
   def white_black_piece_spaces
     pieces = {
       white: [],
